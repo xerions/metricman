@@ -2,7 +2,7 @@ defmodule MetricmanTest do
   use ExUnit.Case
 
   test "list reporters" do
-    assert length(:exometer_report.list_reporters) == 1
+    assert length(:exometer_report.list_reporters) == 0
   end
 
   test "list metrics" do

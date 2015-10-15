@@ -11,9 +11,6 @@ config :exometer, :predefined, [
 ]
 
 config :exometer, :report,
-  reporters: [
-    {:exometer_report_graphite, [{:host, 'localhost'}, {:port, 2003}, {:api_key, 'exometer'}]}
-  ],
   subscribers: [
     {:exometer_report_graphite, [:erlang, :system_info], :port_count, 1000, true},
     {:exometer_report_graphite, [:erlang, :system_info], :process_count, 1000, true},
