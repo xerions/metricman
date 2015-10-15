@@ -15,6 +15,6 @@ defmodule MetricmanTest do
   end
 
   test "home dir to /tmp" do
-    assert '/tmp' == Application.get_env(:setup, :home)
+    assert (System.tmp_dir! |> String.to_char_list) == Application.get_env(:setup, :home)
   end
 end

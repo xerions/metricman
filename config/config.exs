@@ -2,7 +2,7 @@
 # and its dependencies with the aid of the Mix.Config module.
 use Mix.Config
 
-config :setup, :home, '/tmp'
+config :setup, :home, System.tmp_dir! |> String.to_char_list
 
 config :exometer, :predefined, [
   {[:erlang, :system_info], {:function, :erlang, :system_info, [:'$dp'], :value, [:port_count, :process_count, :thread_pool_size]}, []},
