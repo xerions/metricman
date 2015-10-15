@@ -2,7 +2,7 @@ defmodule MetricmanTest do
   use ExUnit.Case
 
   test "list reporters" do
-    assert length(:exometer_report.list_reporters) == 1
+    assert length(:exometer_report.list_reporters) == 0
   end
 
   test "list metrics" do
@@ -14,7 +14,7 @@ defmodule MetricmanTest do
     assert length(:exometer_report.list_subscriptions(:exometer_report_graphite)) > 0
   end
 
-  test "home dir to /dev/null" do
-    assert '/dev/null' == Application.get_env(:setup, :home)
+  test "home dir to /tmp" do
+    assert '/tmp' == Application.get_env(:setup, :home)
   end
 end
