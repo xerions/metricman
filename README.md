@@ -6,6 +6,8 @@ It is just meta package which depends on [xerions/exometer](https://github.com/x
     system_info  process_count
     system_info  thread_pool_size
     statistics   run_queue
+    statistics   garbage_collection
+    statistics   io
     memory       total
     memory       processes
     memory       ets
@@ -28,6 +30,13 @@ It is just meta package which depends on [xerions/exometer](https://github.com/x
               |    `--> boundary/bear
               `--> uwiger/setup
               |    `--> uwiger/edown
+         `--> travelping/exometer_influxdb
+              `--> Feuerlabs/exometer_core
+              `--> benoitc/hackney
+              |    `--> benoitc/erlang-idna
+              |    `--> benoitc/mimerl
+              |    `--> certifi/erlang-certifi
+              |    `--> deadtrickster/ssl_verify_hostname
 
 ## Usage
 
@@ -65,6 +74,13 @@ It is just meta package which depends on [xerions/exometer](https://github.com/x
                                          {:port, 2003},
                                          {:api_key, 'exometer'}]}
         ]
+    ```
+
+    or for InfluxDB you can use conform config:
+
+    ```
+    influx.db = http://127.0.0.1:8086/default_db
+    influx.tags = node:node_name,region:de
     ```
 
     See [this](https://github.com/Feuerlabs/exometer/blob/master/doc/README.md#configuring-reporter-plugins) for more information about configuring the reportes plugins.
