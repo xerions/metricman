@@ -19,7 +19,7 @@
   ],
   translations: [
     "influx.db": fn
-      _mapping, false, acc -> (acc || [])
+      _mapping, "false", acc -> (acc || [])
       _mapping, db, acc ->
         case URI.parse(db) do
           %URI{scheme: protocol, host: host, port: port, path: "/" <> path} ->
@@ -40,7 +40,7 @@
         tags = for tag <- tags do
           case String.split(tag, ":") do
             [key, value] -> {key |> String.to_atom, value}
-            _ -> 
+            _ ->
               IO.puts("Unsupported tags for InfluxDB: #{inspect tags}")
               exit(1)
           end
