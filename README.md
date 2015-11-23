@@ -59,9 +59,10 @@ It is just meta package which depends on [xerions/exometer](https://github.com/x
 3. Include the metricman configuration to your config.exs:
 
     ```elixir
-    metricman_config = "deps/metricman/config/config.exs"
-    if File.exists? metricman_config do
-        import_config "../" <> metricman_config
+    try do 
+        import_config "../deps/metricman/config/config.exs"
+    rescue
+        _  in _ -> :skip
     end
    ```
 
