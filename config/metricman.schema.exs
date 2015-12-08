@@ -23,7 +23,7 @@
       _mapping, db, acc ->
         case URI.parse(db) do
           %URI{scheme: protocol, host: host, port: port, path: "/" <> path} ->
-            params = (acc || [exometer_report_influxdb: []])[:exometer_report_influxdb]
+            params = Access.get(acc || [exometer_report_influxdb: []], :exometer_report_influxdb)
             [exometer_report_influxdb: params ++ [protocol: protocol |> String.to_atom,
                                                   host: host, port: port, db: path]]
           _ ->
@@ -45,7 +45,7 @@
               exit(1)
           end
         end
-        params = (acc || [exometer_report_influxdb: []])[:exometer_report_influxdb]
+        params = Access.get(acc || [exometer_report_influxdb: []], :exometer_report_influxdb)
         [exometer_report_influxdb: params ++ [tags: tags]]
       _, tags, _ ->
         IO.puts("Unsupported tags for InfluxDB: #{inspect tags}")
