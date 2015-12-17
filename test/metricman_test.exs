@@ -14,7 +14,7 @@ defmodule MetricmanTest do
     assert length(:exometer_report.list_subscriptions(:exometer_report_tty)) > 0
   end
 
-  test "home dir to /tmp" do
-    assert (System.tmp_dir! |> String.to_char_list) == Application.get_env(:setup, :home)
+  test "verify_directories false" do
+    assert false == Application.get_env(:setup, :verify_directories)
   end
 end

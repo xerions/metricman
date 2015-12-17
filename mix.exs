@@ -22,6 +22,7 @@ defmodule Metricman.Mixfile do
      {:exometer, github: "xerions/exometer", branch: "master"},
      {:exometer_influxdb, github: "travelping/exometer_influxdb", branch: "master"},
      {:hackney, "~> 1.4.4", override: true},
+     {:setup, github: "uwiger/setup", branch: "master", override: true},
      {:edown, github: "uwiger/edown", branch: "master", override: true},
      {:mock, github: "jjh42/mock"}]
   end
