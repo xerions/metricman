@@ -9,7 +9,7 @@ config :exometer, :predefined, [
   {[:erlang, :statistics], {:function, :erlang, :statistics, [:'$dp'], :value, [:run_queue]}, []},
   {[:erlang, :statistics, :garbage_collection], {:function, Metricman, :garbage_collection, [], :value, [:number_of_gcs, :words_reclaimed]}, []},
   {[:erlang, :statistics, :io], {:function, Metricman, :io, [], :value, [:input, :output]}, []},
-  {[:erlang, :memory], {:function, :erlang, :memory, [:'$dp'], :value, [:total, :processes, :ets, :binary, :atom, :atom_used, :maximum, :system]}, []}
+  {[:erlang, :memory], {:function, :erlang, :memory, [:'$dp'], :value, [:total, :processes, :processes_used, :system, :ets, :binary, :code, :atom, :atom_used]}, []}
 ]
 
 config :metricman, :subscriptions, [
@@ -23,11 +23,13 @@ config :metricman, :subscriptions, [
     {[:erlang, :statistics, :io], :output, 2000},
     {[:erlang, :memory], :total, 2000},
     {[:erlang, :memory], :processes, 2000},
+    {[:erlang, :memory], :processes_used, 2000},
+    {[:erlang, :memory], :system, 2000},
     {[:erlang, :memory], :ets, 2000},
     {[:erlang, :memory], :binary, 2000},
+    {[:erlang, :memory], :code, 2000},
     {[:erlang, :memory], :atom, 2000},
-    {[:erlang, :memory], :atom_used, 2000},
-    {[:erlang, :memory], :maximum, 2000}
+    {[:erlang, :memory], :atom_used, 2000}
   ]
 
 if Mix.env == :test do
