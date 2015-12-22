@@ -42,12 +42,10 @@
             [exometer_report_influxdb: params ++ [protocol: protocol |> String.to_atom,
                                                   host: host, port: port] ++ db]
           _ ->
-            IO.puts("Unsupported URI for InfluxDB: #{db}")
-            exit(1)
+            exit("Unsupported URI for InfluxDB: #{db}")
         end
       _, db, _ ->
-        IO.puts("Unsupported URI for InfluxDB: #{db}")
-        exit(1)
+        exit("Unsupported URI for InfluxDB: #{db}")
     end,
     "influx.tags": fn
       _mapping, [""], acc -> acc
@@ -57,22 +55,19 @@
           case String.split(tag, ":") do
             [key, value] -> {key |> String.to_atom, value}
             _ ->
-              IO.puts("Unsupported tags for InfluxDB: #{inspect tags}")
-              exit(1)
+              exit("Unsupported tags for InfluxDB: #{inspect tags}")
           end
         end
         params = Access.get(acc || [exometer_report_influxdb: []], :exometer_report_influxdb)
         [exometer_report_influxdb: params ++ [tags: tags]]
       _, tags, _ ->
-        IO.puts("Unsupported tags for InfluxDB: #{inspect tags}")
-        exit(1)
+        exit("Unsupported tags for InfluxDB: #{inspect tags}")
     end,
     "influx.batch_window_size": fn
       _mapping, _, nil -> []
       _mapping, window_size, acc ->
         if not is_integer(window_size) do
-          IO.puts("Unsupported batch_window_size for InfluxDB: #{inspect window_size}")
-          exit(1)
+          exit("Unsupported batch_window_size for InfluxDB: #{inspect window_size}")
         end
         params = Access.get(acc || [exometer_report_influxdb: []], :exometer_report_influxdb)
         [exometer_report_influxdb: params ++ [batch_window_size: window_size]]
