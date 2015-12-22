@@ -69,12 +69,13 @@
     end,
     "influx.batch_window_size": fn
       _mapping, _, nil -> []
-      _mapping, window_size, acc when is_integer(window_size) ->
+      _mapping, window_size, acc ->
+        if not is_integer(window_size) do
+          IO.puts("Unsupported batch_window_size for InfluxDB: #{inspect window_size}")
+          exit(1)
+        end
         params = Access.get(acc || [exometer_report_influxdb: []], :exometer_report_influxdb)
         [exometer_report_influxdb: params ++ [batch_window_size: window_size]]
-      _, window_size, _ ->
-        IO.puts("Unsupported batch_window_size for InfluxDB: #{inspect window_size}")
-        exit(1)
     end
   ]
 ]
