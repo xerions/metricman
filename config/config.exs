@@ -32,7 +32,9 @@ config :metricman, :subscriptions, [
     {[:erlang, :memory], :atom_used, 2000}
   ]
 
-if Mix.env == :test do
-  config :exometer, :report, 
-    reporters:  [{:exometer_report_tty, []}]
-end
+# HOTFIX: temporary turn tty reporter off
+# because there are some issues with conform.effective in test env
+#if Mix.env == :test do
+  #config :exometer, :report, 
+    #reporters:  [{:exometer_report_tty, []}]
+#end
