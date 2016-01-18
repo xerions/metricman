@@ -2,8 +2,7 @@ defmodule MetricmanTest do
   use ExUnit.Case
 
   test "list reporters" do
-    #assert length(:exometer_report.list_reporters) == 1
-    assert length(:exometer_report.list_reporters) == 0
+    assert length(:exometer_report.list_reporters) == 1
   end
 
   test "list metrics" do
@@ -12,7 +11,7 @@ defmodule MetricmanTest do
   end
 
   test "list subscriptions" do
-    #assert length(:exometer_report.list_subscriptions(:exometer_report_tty)) > 0
+    assert length(:exometer_report.list_subscriptions(:exometer_report_tty)) > 0
   end
 
   test "verify_directories false" do
