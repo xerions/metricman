@@ -4,7 +4,7 @@
       doc: """
       Influxdb configuration in form of <shema>://<host>[:<port>]/<database>
       """,
-      to: "exometer.report.reporters",
+      to: "exometer_core.report.reporters",
       datatype: :binary,
       default: false
     ],
@@ -12,7 +12,7 @@
       doc: """
       Influxdb additional tags for each metric in form of <key>:<value>,...
       """,
-      to: "exometer.report.reporters",
+      to: "exometer_core.report.reporters",
       datatype: [list: :binary],
       default: ""
     ],
@@ -21,7 +21,7 @@
       Set window size in ms for batch sending.
       This means reported will collect measurements within this interval and send all measurements in one packet.
       """,
-      to: "exometer.report.reporters",
+      to: "exometer_core.report.reporters",
       datatype: :integer,
       default: 0
     ]

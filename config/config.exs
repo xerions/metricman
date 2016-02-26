@@ -4,7 +4,7 @@ use Mix.Config
 
 config :setup, :verify_directories, false
 
-config :exometer, :predefined, [
+config :exometer_core, :predefined, [
   {[:erlang, :system_info], {:function, :erlang, :system_info, [:'$dp'], :value, [:port_count, :process_count, :thread_pool_size]}, []},
   {[:erlang, :statistics], {:function, :erlang, :statistics, [:'$dp'], :value, [:run_queue]}, []},
   {[:erlang, :statistics, :garbage_collection], {:function, Metricman, :garbage_collection, [], :value, [:number_of_gcs, :words_reclaimed]}, []},
@@ -33,6 +33,6 @@ config :metricman, :subscriptions, [
   ]
 
 if Mix.env == :test do
-  config :exometer, :report,
+  config :exometer_core, :report,
     reporters:  [{:exometer_report_tty, []}]
 end
