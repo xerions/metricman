@@ -1,6 +1,6 @@
 # Metricman [![Build Status](https://travis-ci.org/xerions/metricman.svg?branch=master)](https://travis-ci.org/xerions/metricman)
 
-It is just meta package which depends on [xerions/exometer](https://github.com/xerions/exometer) and configures some VM metrics like this:
+It is just meta package which depends on [Feuerlabs/exometer_core](https://github.com/xerions/exometer), [travelping/exometer_influxdb](https://github.com/travelping/exometer_influxdb) and configures some VM metrics like this:
 
     system_info  port_count
     system_info  process_count
@@ -19,24 +19,23 @@ It is just meta package which depends on [xerions/exometer](https://github.com/x
 ## Dependencies tree
 
     xerions/metricman 
-    `--> xerions/exometer
+    `--> travelping/exometer_influxdb
          `--> Feuerlabs/exometer_core
-              `--> basho/lager
-              |    `--> DeadZen/goldrush
-              `--> uwiger/parse_trans
-              |    `--> uwiger/edown
-              `--> eproxus/meck
-              `--> boundary/folsom
-              |    `--> boundary/bear
-              `--> uwiger/setup
-              |    `--> uwiger/edown
-         `--> travelping/exometer_influxdb
-              `--> Feuerlabs/exometer_core
-              `--> benoitc/hackney
-              |    `--> benoitc/erlang-idna
-              |    `--> benoitc/mimerl
-              |    `--> certifi/erlang-certifi
-              |    `--> deadtrickster/ssl_verify_hostname
+             `--> basho/lager
+             |    `--> DeadZen/goldrush
+             `--> uwiger/parse_trans
+             |    `--> uwiger/edown
+             `--> eproxus/meck
+             `--> boundary/folsom
+             |    `--> boundary/bear
+             `--> uwiger/setup
+             |    `--> uwiger/edown
+         `--> benoitc/hackney
+             `--> benoitc/erlang-idna
+             `--> benoitc/mimerl
+             `--> benoitc/metrics
+             `--> certifi/erlang-certifi
+             `--> deadtrickster/ssl_verify_hostname
 
 ## Usage
 
@@ -69,11 +68,13 @@ It is just meta package which depends on [xerions/exometer](https://github.com/x
 4. And you can add your own exometer reporter in your config.exs:
 
     ```elixir
-    config :exometer, :report,
+    config :exometer_core, :report,
         reporters: [
-            {:exometer_report_graphite, [{:host, 'localhost'},
-                                         {:port, 2003},
-                                         {:api_key, 'exometer'}]}
+            {:exometer_report_influxdb, [{:protocol, :http},
+                                         {:host, "localhost"},
+                                         {:port, 8086},
+                                         {:db, "exometer"},
+                                         {:tags, [{:region, :ru}]}]}
         ]
     ```
 
@@ -82,6 +83,7 @@ It is just meta package which depends on [xerions/exometer](https://github.com/x
     ```
     influx.db = http://127.0.0.1:8086/default_db
     influx.tags = node:node_name,region:de
+    influx.batch_window_size = 50
     ```
 
     See [this](https://github.com/Feuerlabs/exometer/blob/master/doc/README.md#configuring-reporter-plugins) for more information about configuring the reportes plugins.
