@@ -1,5 +1,8 @@
 language: elixir
+sudo: false
+elixir:
+  - 1.1.0
+  - 1.2.0
 otp_release:
-    - 17.4
-before_script:
-    "nc -l 2003 &"
+    - 17.5
+    - 18.0
