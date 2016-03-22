@@ -34,5 +34,5 @@ config :metricman, :subscriptions, [
 
 if Mix.env == :test do
   config :exometer_core, :report,
-    reporters:  [{:exometer_report_tty, []}]
+    reporters:  [{Metricman.DummyReporter, []}]
 end

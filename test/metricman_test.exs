@@ -11,7 +11,7 @@ defmodule MetricmanTest do
   end
 
   test "list subscriptions" do
-    assert length(:exometer_report.list_subscriptions(:exometer_report_tty)) > 0
+    assert length(:exometer_report.list_subscriptions(Metricman.DummyReporter)) > 0
   end
 
   test "verify_directories false" do
