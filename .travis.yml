@@ -1,4 +1,8 @@
 language: elixir
+sudo: false
+elixir:
+  - 1.1.0
+  - 1.2.0
 otp_release:
     - 17.5
-    - 18.9
+    - 18.0
