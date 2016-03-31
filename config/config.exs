@@ -9,7 +9,10 @@ config :exometer_core, :predefined, [
   {[:erlang, :statistics], {:function, :erlang, :statistics, [:'$dp'], :value, [:run_queue]}, []},
   {[:erlang, :statistics, :garbage_collection], {:function, Metricman, :garbage_collection, [], :value, [:number_of_gcs, :words_reclaimed]}, []},
   {[:erlang, :statistics, :io], {:function, Metricman, :io, [], :value, [:input, :output]}, []},
-  {[:erlang, :memory], {:function, :erlang, :memory, [:'$dp'], :value, [:total, :processes, :processes_used, :system, :ets, :binary, :code, :atom, :atom_used]}, []}
+  {[:erlang, :memory], {:function, :erlang, :memory, [:'$dp'], :value, [:total, :processes, :processes_used, :system, :ets, :binary, :code, :atom, :atom_used]}, []},
+  {[:erlang, :scheduler, :usage], {:function, :recon, :scheduler_usage, [1000], :proplist, :lists.seq(1, :erlang.system_info(:schedulers))}, []},
+  {[:erlang, :beam, :start_time], :gauge, []},
+  {[:erlang, :beam, :uptime], {:function, Metricman, :update_uptime, [], :proplist, [:value]}, []}
 ]
 
 config :metricman, :subscriptions, [
@@ -29,7 +32,10 @@ config :metricman, :subscriptions, [
     {[:erlang, :memory], :binary, 2000},
     {[:erlang, :memory], :code, 2000},
     {[:erlang, :memory], :atom, 2000},
-    {[:erlang, :memory], :atom_used, 2000}
+    {[:erlang, :memory], :atom_used, 2000},
+    {[:erlang, :scheduler, :usage], :lists.seq(1, :erlang.system_info(:schedulers)), 2000},
+    {[:erlang, :beam, :start_time], :value, 2000},
+    {[:erlang, :beam, :uptime], :value, 2000}
   ]
 
 if Mix.env == :test do
