@@ -7,7 +7,6 @@ defmodule Metricman do
 
     children = []
 
-    subscribe_all
     :exometer.update([:erlang, :beam, :start_time], timestamp())
 
     opts = [strategy: :one_for_one]
@@ -22,14 +21,6 @@ defmodule Metricman do
   def io do
     {{:input, input}, {:output, output}} = :erlang.statistics(:io)
     [input: input, output: output]
-  end
-
-  def subscribe_all do
-    for {reporter, _} <- :exometer_report.list_reporters do
-      for {name, data_point, time} <- Application.get_env(:metricman, :subscriptions) do
-        :exometer_report.subscribe(reporter, name, data_point, time)
-      end
-    end
   end
 
   def update_uptime do
