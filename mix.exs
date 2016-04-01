@@ -21,6 +21,7 @@ defmodule Metricman.Mixfile do
 
      {:exometer_influxdb, github: "travelping/exometer_influxdb", branch: "master"},
 
+     {:recon, "~> 2.2.1"},
      {:goldrush, github: "DeadZen/goldrush", tag: "0.1.6", override: true},
      {:setup, github: "uwiger/setup", branch: "master", override: true},
      {:edown, github: "uwiger/edown", branch: "master", override: true}
