@@ -15,29 +15,6 @@ config :exometer_core, :predefined, [
   {[:erlang, :beam, :uptime], {:function, Metricman, :update_uptime, [], :proplist, [:value]}, []}
 ]
 
-config :metricman, :subscriptions, [
-    {[:erlang, :system_info], :port_count, 2000},
-    {[:erlang, :system_info], :process_count, 2000},
-    {[:erlang, :system_info], :thread_pool_size, 2000},
-    {[:erlang, :statistics], :run_queue, 2000},
-    {[:erlang, :statistics, :garbage_collection], :number_of_gcs, 2000},
-    {[:erlang, :statistics, :garbage_collection], :words_reclaimed, 2000},
-    {[:erlang, :statistics, :io], :input, 2000},
-    {[:erlang, :statistics, :io], :output, 2000},
-    {[:erlang, :memory], :total, 2000},
-    {[:erlang, :memory], :processes, 2000},
-    {[:erlang, :memory], :processes_used, 2000},
-    {[:erlang, :memory], :system, 2000},
-    {[:erlang, :memory], :ets, 2000},
-    {[:erlang, :memory], :binary, 2000},
-    {[:erlang, :memory], :code, 2000},
-    {[:erlang, :memory], :atom, 2000},
-    {[:erlang, :memory], :atom_used, 2000},
-    {[:erlang, :scheduler, :usage], :lists.seq(1, :erlang.system_info(:schedulers)), 2000},
-    {[:erlang, :beam, :start_time], :value, 2000},
-    {[:erlang, :beam, :uptime], :value, 2000}
-  ]
-
 if Mix.env == :test do
   config :exometer_core, :report,
     reporters:  [{Metricman.DummyReporter, []}]

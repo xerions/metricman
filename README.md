@@ -16,6 +16,8 @@ It is just meta package which depends on [Feuerlabs/exometer_core](https://githu
     memory       atom_used
     memory       maximum
 
+You can see the created metrics in `config/config.exs`. Note that the metrics are only created. If you want to expose them via a reporter then you need to subscribe to them within your application.
+
 ## Dependencies tree
 
     xerions/metricman 
