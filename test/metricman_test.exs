@@ -11,9 +11,9 @@ defmodule MetricmanTest do
   end
 
   test "list subscriptions" do
-    assert :ok = :exometer_report.subscribe(Metricman.DummyReporter, [:erlang, :memory], :total, 100)
+    assert :ok = :exometer_report.subscribe(Metricman.DummyReporter, [:erlang, :beam, :memory], :total, 100)
     assert length(:exometer_report.list_subscriptions(Metricman.DummyReporter)) > 0
-    assert :ok = :exometer_report.unsubscribe_all(Metricman.DummyReporter, [:erlang, :memory])
+    assert :ok = :exometer_report.unsubscribe_all(Metricman.DummyReporter, [:erlang, :beam, :memory])
     assert length(:exometer_report.list_subscriptions(Metricman.DummyReporter)) == 0
   end
 
