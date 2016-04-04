@@ -1,23 +1,16 @@
 # Metricman [![Build Status](https://travis-ci.org/xerions/metricman.svg?branch=master)](https://travis-ci.org/xerions/metricman)
 
-It is just meta package which depends on [Feuerlabs/exometer_core](https://github.com/xerions/exometer), [travelping/exometer_influxdb](https://github.com/travelping/exometer_influxdb) and configures some VM metrics like this:
+It is just meta package which depends on [Feuerlabs/exometer_core](https://github.com/xerions/exometer), [travelping/exometer_influxdb](https://github.com/travelping/exometer_influxdb) and configures some VM metrics:
 
-    system_info  port_count
-    system_info  process_count
-    system_info  thread_pool_size
-    statistics   run_queue
-    statistics   garbage_collection
-    statistics   io
-    memory       total
-    memory       processes
-    memory       ets
-    memory       binary
-    memory       atom
-    memory       atom_used
-    memory       maximum
-    scheduler    usage
-    beam         start time
-    beam         uptime
+  * Erlang release version number
+  * BEAM start and uptime
+  * Port information
+  * Processes information
+  * Processors information
+  * Garabage collection
+  * I/O
+  * Memory usage
+  * Scheduler usage
 
 You can see the created metrics in `config/config.exs`. Note that the metrics are only created. If you want to expose them via a reporter then you need to subscribe to them from within your application.
 

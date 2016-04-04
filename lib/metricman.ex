@@ -23,6 +23,13 @@ defmodule Metricman do
     [input: input, output: output]
   end
 
+  def process_info do
+    process_count = :erlang.system_info(:process_count)
+    process_limit = :erlang.system_info(:process_limit)
+    run_queue_size = :erlang.statistics(:run_queue)
+    [process_count: process_count, process_limit: process_limit, run_queue_size: run_queue_size]
+  end
+
   def update_uptime do
     {:ok, [{:value, start_time}, _ ]} = :exometer.get_value([:erlang, :beam, :start_time])
     uptime = timestamp() - start_time
