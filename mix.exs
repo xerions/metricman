@@ -11,7 +11,7 @@ defmodule Metricman.Mixfile do
   end
 
   def application do
-    [applications: [:exometer_influxdb],
+    [applications: [:exometer_fetch, :exometer_influxdb],
      mod: {Metricman, []}]
   end
 
@@ -20,6 +20,7 @@ defmodule Metricman.Mixfile do
      {:meck, "~> 0.8.2", override: true},
 
      {:exometer_influxdb, github: "travelping/exometer_influxdb", branch: "master"},
+     {:exometer_fetch, github: "travelping/exometer_fetch", branch: "master"},
 
      {:recon, "~> 2.2.1"},
      {:goldrush, github: "DeadZen/goldrush", tag: "0.1.6", override: true},

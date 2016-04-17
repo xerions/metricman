@@ -1,6 +1,6 @@
 [
   mappings: [
-    "influx.db": [
+    "metrics.influx.db": [
       doc: """
       Influxdb configuration in form of <shema>://<host>[:<port>]/<database>
       """,
@@ -8,7 +8,7 @@
       datatype: :binary,
       default: false
     ],
-    "influx.tags": [
+    "metrics.influx.tags": [
       doc: """
       Influxdb additional tags for each metric in form of <key>:<value>,...
       """,
@@ -16,7 +16,7 @@
       datatype: [list: :binary],
       default: ""
     ],
-    "influx.batch_window_size": [
+    "metrics.influx.batch_window_size": [
       doc: """
       Set window size in ms for batch sending.
       This means reported will collect measurements within this interval and send all measurements in one packet.
@@ -27,8 +27,9 @@
     ]
   ],
   translations: [
-    "influx.db": fn
-      _mapping, "false", acc -> acc
+    "metrics.influx.db": fn
+      _mapping, "false", acc ->
+        Keyword.drop(acc, [:exometer_report_influxdb])
       _mapping, db, acc ->
         case URI.parse(db) do
           %URI{scheme: protocol, host: host, port: port} = uri ->
@@ -38,16 +39,15 @@
                 "/" <> path = uri.path  
                 [db: path]
             end
-            params = Access.get(acc || [exometer_report_influxdb: []], :exometer_report_influxdb)
-            [exometer_report_influxdb: params ++ [protocol: protocol |> String.to_atom,
-                                                  host: host, port: port] ++ db]
+            params = Access.get(acc || [], :exometer_report_influxdb, [])
+            Keyword.put(acc || [], :exometer_report_influxdb, params ++ [protocol: protocol |> String.to_atom, host: host, port: port] ++ db)
           _ ->
             exit("Unsupported URI for InfluxDB: #{db}")
         end
       _, db, _ ->
         exit("Unsupported URI for InfluxDB: #{db}")
     end,
-    "influx.tags": fn
+    "metrics.influx.tags": fn
       _mapping, [""], acc -> acc
       _mapping, _, nil -> nil
       _mapping, tags, acc ->
@@ -58,19 +58,23 @@
               exit("Unsupported tags for InfluxDB: #{inspect tags}")
           end
         end
-        params = Access.get(acc || [exometer_report_influxdb: []], :exometer_report_influxdb)
-        [exometer_report_influxdb: params ++ [tags: tags]]
+        if Keyword.has_key?(acc, :exometer_report_influxdb) do
+          params = Access.get(acc, :exometer_report_influxdb, [])
+          Keyword.put(acc, :exometer_report_influxdb, params ++ [tags: tags])
+        else acc end
       _, tags, _ ->
         exit("Unsupported tags for InfluxDB: #{inspect tags}")
     end,
-    "influx.batch_window_size": fn
+    "metrics.influx.batch_window_size": fn
       _mapping, _, nil -> []
       _mapping, window_size, acc ->
         if not is_integer(window_size) do
           exit("Unsupported batch_window_size for InfluxDB: #{inspect window_size}")
         end
-        params = Access.get(acc || [exometer_report_influxdb: []], :exometer_report_influxdb)
-        [exometer_report_influxdb: params ++ [batch_window_size: window_size]]
+        if Keyword.has_key?(acc, :exometer_report_influxdb) do
+          params = Access.get(acc, :exometer_report_influxdb)
+          Keyword.put(acc, :exometer_report_influxdb, params ++ [batch_window_size: window_size])
+        else acc end
     end
   ]
 ]
