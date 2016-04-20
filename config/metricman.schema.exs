@@ -28,6 +28,7 @@
   ],
   translations: [
     "metrics.influx.db": fn
+      _mapping, "false", nil -> nil
       _mapping, "false", acc ->
         Keyword.drop(acc, [:exometer_report_influxdb])
       _mapping, db, acc ->
