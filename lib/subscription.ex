@@ -112,7 +112,7 @@ defmodule Metricman.Subscription do
                              (id, acc) ->  acc ++ [id]
                           end)
         opts = Keyword.merge(@opts, unquote(opts))
-        path |> result(metric_type, unquote(exo_id), vars, opts)  
+        path |> result(metric_type, unquote(exo_id_for_match), vars, opts)  
       end
     end
   end

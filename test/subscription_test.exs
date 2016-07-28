@@ -16,6 +16,7 @@ defmodule MetricmanSubscribtionTest do
         scope [:region, "$city"] do # it is posible to use list and string as variable name
           map [:used],  [:ippools, :ip, '$country', '$city', :used]
           map [:total], [:ippools, :ip, "$country", "$city", :total]
+          map [:func], [:ippools, :ip, "$country", "$city", :func]
         end
         map [:used],  [:ippools, :ip, '$country', :used]
         map [:total], [:ippools, :ip, '$country', :total]
@@ -36,10 +37,14 @@ defmodule MetricmanSubscribtionTest do
     :exometer.new([:ippools, :ip, :ru, :nsk, :used], :counter)
     :exometer.new([:ippools, :ip, :ru, :nsk, :total], :counter)
     :exometer.new([:ippools, :ip, :ru, :req], :histogram)
+    :exometer.new([:ippools, :ip, :ru, :nsk, :func], 
+                  {:function, __MODULE__, :test_func, [], :proplist, [:value, :value2]}, [])
     on_exit fn ->
       for {name, _} <- :exometer.get_values([:ippools]), do: :exometer.delete(name)
     end
   end
+
+  def test_func(), do: [value: 1]
 
 
   test "get not found" do
@@ -70,5 +75,7 @@ defmodule MetricmanSubscribtionTest do
            == TestModule.get([:ippools, :ip, :ru, :nsk, :used], :counter)
     assert {:ok, {[:ipPools, :ru, :region, :nsk, :total], [:value], @opts1}} 
            == TestModule.get([:ippools, :ip, :ru, :nsk, :total], :counter)
+    assert {:ok, {[:ipPools, :ru, :region, :nsk, :func], [:value, :value2], @opts1}} 
+           == TestModule.get([:ippools, :ip, :ru, :nsk, :func], :function)
   end
 end
