@@ -97,8 +97,8 @@ defmodule Metricman.Subscription do
                                      ("$" <> id, ids) -> ids ++ [{id |> to_downcased_atom, [], Elixir}]
                                      (id, ids) -> ids ++ [id] end)
     vars = List.foldl(exo_id, [], 
-                      fn ([?$ | id], acc) -> acc ++ [id |> to_downcased_atom]
-                         ("$" <>  id, acc) -> acc ++ [id |> to_downcased_atom]
+                      fn ([?$ | _] = id, acc) -> acc ++ [id |> to_downcased_atom]
+                         ("$" <>  _ = id, acc) -> acc ++ [id |> to_downcased_atom]
                          (_, acc) ->  acc ++ [:_]
                       end)
     quote do 
@@ -107,8 +107,8 @@ defmodule Metricman.Subscription do
                |> Enum.zip(unquote(exo_id_for_match)) 
                |> Enum.filter(fn({x, _}) -> x != :_ end)
         path = List.foldl(@path ++ unquote(id), [], 
-                          fn ([?$ | id], acc) -> acc ++ [id |> to_downcased_atom]
-                             ("$" <> id, acc) -> acc ++ [id |> to_downcased_atom]
+                          fn ([?$ | _] = id, acc) -> acc ++ [id |> to_downcased_atom]
+                             ("$" <> _ = id, acc) -> acc ++ [id |> to_downcased_atom]
                              (id, acc) ->  acc ++ [id]
                           end)
         opts = Keyword.merge(@opts, unquote(opts))

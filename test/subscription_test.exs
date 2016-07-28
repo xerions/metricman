@@ -13,10 +13,10 @@ defmodule MetricmanSubscribtionTest do
       map [:used],  [:ippools, :ip, :total, :used]
       map [:total], [:ippools, :ip, :total, :total], @opts2
       scope ['$country'] do
-        scope [:region, "$city"] do # it is posible to use list and string as variable name
-          map [:used],  [:ippools, :ip, '$country', '$city', :used]
-          map [:total], [:ippools, :ip, "$country", "$city", :total]
-          map [:func], [:ippools, :ip, "$country", "$city", :func]
+        scope [:region, "$region"] do # it is posible to use list and string as variable name
+          map [:used],  [:ippools, :ip, '$country', '$region', :used]
+          map [:total], [:ippools, :ip, "$country", "$region", :total]
+          map [:func], [:ippools, :ip, "$country", "$region", :func]
         end
         map [:used],  [:ippools, :ip, '$country', :used]
         map [:total], [:ippools, :ip, '$country', :total]
