@@ -24,10 +24,20 @@
       to: "exometer_core.report.reporters.exometer_report_influxdb.batch_window_size",
       datatype: :integer,
       default: 0
-    ]
+    ],
+    "metrics.influx.autosubscribe": [
+      to: "exometer_core.report.reporters.exometer_report_influxdb.autosubscribe",
+      datatype: [enum: [true, false]],
+      default: true
+    ],
+    "metrics.fetch.autosubscribe": [
+      to: "exometer_core.report.reporters.exometer_report_fetch.autosubscribe",
+      datatype: [enum: [true, false]],
+      default: true
+    ],
   ],
   transforms: [
-    "exometer_core.report.reporters.exometer_report_influxdb": fn table ->
+    "exometer_core.report.reporters": fn table ->
       db = case Conform.Conf.get(table, "exometer_core.report.reporters.exometer_report_influxdb.db") do
              [{_, db}] when is_binary(db) and db != "false" ->
                case URI.parse(db) do
@@ -45,6 +55,12 @@
              _ ->
                [db: "false"]
            end
+      autosubscribe = case Conform.Conf.get(table, "exometer_core.report.reporters.exometer_report_influxdb.autosubscribe") do
+                        [{_, true}] ->
+                          [autosubscribe: true]
+                        _ ->
+                          []
+                      end
       tags = case Conform.Conf.get(table, "exometer_core.report.reporters.exometer_report_influxdb.tags") do
                [{_, []}] ->
                  []
@@ -67,10 +83,19 @@
                               end
                              [batch_window_size: window_size]
                           end
-      :ets.delete(table, ['exometer_core', 'report', 'reporters', 'exometer_report_influxdb', 'db'])
-      :ets.delete(table, ['exometer_core', 'report', 'reporters', 'exometer_report_influxdb', 'tags'])
-      :ets.delete(table, ['exometer_core', 'report', 'reporters', 'exometer_report_influxdb', 'batch_window_size'])
-      db ++ tags ++ batch_window_size
+      fetch_reporter = case Conform.Conf.get(table, "exometer_core.report.reporters.exometer_report_fetch.autosubscribe") do
+                        [{_, true}] ->
+                          [exometer_report_fetch: [autosubscribe: true]]
+                        _ ->
+                          [exometer_report_fetch: [autosubscribe: false]]
+                      end
+      db = if db != [db: "false"] do
+             [exometer_report_influxdb: db ++ tags ++ batch_window_size ++ autosubscribe]
+           else
+             []
+           end
+      :ets.match_delete(table, {['exometer_core', 'report', 'reporters' | :_], :_})
+      [db, fetch_reporter] |> List.flatten
   end
   ]
 ]
