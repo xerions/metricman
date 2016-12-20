@@ -23,7 +23,7 @@ defmodule Metricman.Mixfile do
      {:exometer_fetch, github: "travelping/exometer_fetch", branch: "master"},
 
      {:recon, "~> 2.2.1"},
-     {:goldrush, github: "DeadZen/goldrush", tag: "0.1.6", override: true},
+     {:goldrush, github: "DeadZen/goldrush", tag: "0.1.8", override: true},
      {:setup, github: "uwiger/setup", branch: "master", override: true},
      {:edown, github: "uwiger/edown", branch: "master", override: true}
    ]
