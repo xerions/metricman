@@ -24,7 +24,7 @@ defmodule Metricman.Mixfile do
 
      {:recon, "~> 2.2.1"},
      {:goldrush, github: "DeadZen/goldrush", tag: "0.1.8", override: true},
-     {:setup, github: "uwiger/setup", branch: "master", override: true},
+     {:setup, github: "uwiger/setup", branch: "master", override: true, compile: "make"},
      {:edown, github: "uwiger/edown", branch: "master", override: true}
    ]
   end
