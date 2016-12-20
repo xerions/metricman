@@ -16,16 +16,15 @@ defmodule Metricman.Mixfile do
   end
 
   defp deps(_) do
-    [{:lager, "~> 2.1.1", override: true},
-     {:meck, "~> 0.8.2", override: true},
+    [{:meck, "~> 0.8.2", override: true},
 
      {:exometer_influxdb, github: "travelping/exometer_influxdb", branch: "master"},
      {:exometer_fetch, github: "travelping/exometer_fetch", branch: "master"},
 
      {:recon, "~> 2.2.1"},
-     {:goldrush, github: "DeadZen/goldrush", tag: "0.1.8", override: true},
      {:setup, github: "uwiger/setup", branch: "master", override: true, compile: "make"},
-     {:edown, github: "uwiger/edown", branch: "master", override: true}
+     {:edown, github: "uwiger/edown", branch: "master", override: true},
+     {:lager,         github: "basho/lager", tag: "3.2.2", override: true}
    ]
   end
 end
