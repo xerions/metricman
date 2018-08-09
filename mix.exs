@@ -16,8 +16,11 @@ defmodule Metricman.Mixfile do
   end
 
   defp deps(_) do
-    [{:exometer_influxdb, "~> 0.5.7"},
+    [{:exometer_influxdb, "~> 0.6.0"},
      {:exometer_fetch,    "~> 0.1.0"},
-     {:recon,             "~> 2.2.1"}]
+     {:recon,             "~> 2.2.1"},
+    
+     {:parse_trans, "~> 3.2.0", override: true},
+    ]
   end
 end
