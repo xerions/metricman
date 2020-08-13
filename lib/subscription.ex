@@ -1,13 +1,13 @@
 defmodule Metricman.Subscription do
   @moduledoc """
-    Helper for defined metrics mapping which can be used together with subscription modules 
+    Helper for defined metrics mapping which can be used together with subscription modules
     from exometer_influxdb or exometer_fetch.
-    
+
     ## Example
 
         defmodule MetrcisMapping do
           use Metricman.Subscription
-          
+
           scope [:ipPools], opts \\ [] do
             map [:used],  [:ippools, :ip, :total, :used], opts \\ []
             map [:total], [:ippools, :ip, :total, :total], opts \\ []
@@ -18,8 +18,26 @@ defmodule Metricman.Subscription do
           end
         end
 
-    After compiling here will be available `MetrcisMapping.get/2` function 
+    After compiling here will be available `MetrcisMapping.get/2` function
     which can be used for geting external id by internal id and its type.
+
+    Besides this, the module could be used for a mapping of prometheus
+    metrics:
+
+    ## Example
+
+        defmodule MetrcisMapping do
+          use Metricman.Subscription
+
+          scope ["ipPools"] do
+            map ["used"],  ["ippools", "ip", "total", "used"], labels \\ []
+            map ["total"], ["ippools", "ip", "total", "total"], labels \\ []
+            scope ['$country'] do
+              map ["used"],  ["ippools", "ip", "used"], ['$country']
+              map ["total"], ["ippools", "ip", "total"], ['$country']
+            end
+          end
+        end
   """
 
   @doc false
@@ -34,8 +52,9 @@ defmodule Metricman.Subscription do
 
   @doc false
   defmacro __before_compile__(_env) do
-    quote do 
+    quote do
       def get(_, _), do: {:error, :not_found}
+      def get(_, _, _), do: {:error, :not_found}
     end
   end
 
@@ -56,10 +75,10 @@ defmodule Metricman.Subscription do
     * :context -> [:value]
     * :function -> returns all datapoints registered for this function
 
-  `opts` is keyword list and nested options will be merged with scope. 
+  `opts` is keyword list and nested options will be merged with scope.
   There are the following special options:
 
-    * :detapoints - override default datapoints for for entry.  
+    * :detapoints - override default datapoints for for entry.
 
   ### Variables
 
@@ -95,18 +114,32 @@ defmodule Metricman.Subscription do
     exo_id_for_match = List.foldl(exo_id, [],
                                   fn ([?$ | id], ids) -> ids ++ [{id |> to_downcased_atom, [], Elixir}]
                                      ("$" <> id, ids) -> ids ++ [{id |> to_downcased_atom, [], Elixir}]
-                                     (id, ids) -> ids ++ [id] end)
-    vars = List.foldl(exo_id, [], 
+                                    (id, ids) -> ids ++ [id] end)
+
+    vars = List.foldl(exo_id, [],
                       fn ([?$ | _] = id, acc) -> acc ++ [id |> to_downcased_atom]
                          ("$" <>  _ = id, acc) -> acc ++ [id |> to_downcased_atom]
                          (_, acc) ->  acc ++ [:_]
                       end)
-    quote do 
+    quote do
+      def get(unquote(exo_id_for_match), metric_type, labels) do
+        Enum.map(@path ++ unquote(id), fn (path) ->
+          case path do
+            [?$ | _] ->
+              idx = Enum.find_index(unquote(opts), fn (label) ->
+                label == path
+              end)
+              to_string(Enum.at(labels, idx))
+            _ ->
+              path
+          end
+        end)
+      end
       def get(unquote(exo_id_for_match), metric_type) do
-        vars = unquote(vars) 
-               |> Enum.zip(unquote(exo_id_for_match)) 
+        vars = unquote(vars)
+               |> Enum.zip(unquote(exo_id_for_match))
                |> Enum.filter(fn({x, _}) -> x != :_ end)
-        path = List.foldl(@path ++ unquote(id), [], 
+        path = List.foldl(@path ++ unquote(id), [],
                           fn ([?$ | _] = id, acc) -> acc ++ [id |> to_downcased_atom]
                              ("$" <> _ = id, acc) -> acc ++ [id |> to_downcased_atom]
                              (id, acc) ->  acc ++ [id]
